@@ -5,7 +5,7 @@ namespace Blog.Application.Services.Authentication
         public AuthenticationResponse Login(string Email, string Password)
         {
             return new AuthenticationResponse(
-                Id: new Guid(),
+                Id: Guid.NewGuid(),
                 FirstName: "",
                 LastName: "",
                 Email: Email,
@@ -21,7 +21,7 @@ namespace Blog.Application.Services.Authentication
         )
         {
             return new AuthenticationResponse(
-                Id: new Guid(),
+                Id: Guid.NewGuid(),
                 FirstName: FirstName,
                 LastName: LastName,
                 Email: Email,
