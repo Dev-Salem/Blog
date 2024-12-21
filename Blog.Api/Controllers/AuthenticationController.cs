@@ -14,6 +14,7 @@ namespace Blog.Api.Controllers
         [Route("register")]
         public async Task<IActionResult> Register(RegisterRequest request)
         {
+            throw new Exception("Just trying");
             var result = _service.Register(
                 FirstName: request.FirstName,
                 LastName: request.LastName,
