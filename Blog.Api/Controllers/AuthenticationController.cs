@@ -1,12 +1,12 @@
+using Blog.Application.Services;
 using Blog.Application.Services.Authentication;
 using Blog.Contracts.Authentication;
 using Microsoft.AspNetCore.Mvc;
 
 namespace Blog.Api.Controllers
 {
-    [ApiController]
     [Route("auth")]
-    public class AuthenticationController(IAuthService service) : ControllerBase
+    public class AuthenticationController(IAuthService service) : ApiController
     {
         private readonly IAuthService _service = service;
 
@@ -14,22 +14,35 @@ namespace Blog.Api.Controllers
         [Route("register")]
         public async Task<IActionResult> Register(RegisterRequest request)
         {
-            throw new Exception("Just trying");
-            var result = _service.Register(
+            var authResult = _service.Register(
                 FirstName: request.FirstName,
                 LastName: request.LastName,
                 Email: request.Email,
                 Password: request.Password
             );
-            return Ok(result);
+            return authResult.Match(
+                value => Ok(MapAuthenticationResult(value)),
+                errors => Problem(errors)
+            );
+        }
+
+        private static AuthenticationResponse MapAuthenticationResult(AuthenticationResult value)
+        {
+            return new AuthenticationResponse(
+                Id: value.User.Id,
+                FirstName: value.User.FirstName,
+                LastName: value.User.LastName,
+                Email: value.User.Email,
+                Token: value.Token
+            );
         }
 
         [HttpPost]
         [Route("login")]
         public async Task<IActionResult> Login(LoginRequest request)
         {
-            var result = _service.Login(Email: request.Email, Password: request.Password);
-            return Ok(result);
+            var authResult = _service.Login(Email: request.Email, Password: request.Password);
+            return authResult.Match(value => Ok(MapAuthenticationResult(value)), Problem);
         }
     }
 }

@@ -1,6 +1,8 @@
 using Blog.Application.Common.Interfaces;
 using Blog.Application.Common.Interfaces.Persistence;
+using Blog.Domain.Common.Errors;
 using Blog.Domain.Entities;
+using ErrorOr;
 
 namespace Blog.Application.Services.Authentication
 {
@@ -10,21 +12,21 @@ namespace Blog.Application.Services.Authentication
         private readonly IJwtTokenGenerator _tokenGenerator = tokenGenerator;
         private readonly IUserRepository _userRepository = userRepository;
 
-        public AuthenticationResponse Login(string Email, string Password)
+        public ErrorOr<AuthenticationResult> Login(string Email, string Password)
         {
             if (_userRepository.GetUserByEmail(Email) is not User user)
             {
-                throw new Exception("User does not exist");
+                return Errors.Authentication.InvalidCredentials;
             }
             if (user.Password != Password)
             {
-                throw new Exception("Password is incorrect");
+                return Errors.Authentication.InvalidCredentials;
             }
             var token = _tokenGenerator.GenerateToke(user.Id, user.FirstName, user.LastName);
-            return new AuthenticationResponse(user, Token: token);
+            return new AuthenticationResult(user, Token: token);
         }
 
-        public AuthenticationResponse Register(
+        public ErrorOr<AuthenticationResult> Register(
             string FirstName,
             string LastName,
             string Email,
@@ -33,7 +35,7 @@ namespace Blog.Application.Services.Authentication
         {
             if (_userRepository.GetUserByEmail(Email) != null)
             {
-                throw new Exception("User already registered");
+                return Errors.User.DuplicateUser;
             }
             var user = new User()
             {
@@ -45,7 +47,7 @@ namespace Blog.Application.Services.Authentication
             };
             var token = _tokenGenerator.GenerateToke(user.Id, user.FirstName, user.LastName);
             _userRepository.Add(user);
-            return new AuthenticationResponse(user, token);
+            return new AuthenticationResult(user, token);
         }
     }
 }

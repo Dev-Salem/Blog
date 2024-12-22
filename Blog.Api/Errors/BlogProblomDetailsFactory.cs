@@ -1,4 +1,5 @@
 using System.Diagnostics;
+using ErrorOr;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Infrastructure;
 using Microsoft.AspNetCore.Mvc.ModelBinding;
@@ -91,7 +92,9 @@ public class BlogProblemDetailsFactory(IOptions<ApiBehaviorOptions> options) : P
         {
             problemDetails.Extensions["traceId"] = traceId;
         }
-
-        // problemDetails.Extensions.Add("customProperty", "customValue");
+        if (httpContext?.Items["errors"] is List<Error> errorCodes)
+        {
+            problemDetails.Extensions.Add("errorCodes", errorCodes.Select(e => e.Code).ToList());
+        }
     }
 }
