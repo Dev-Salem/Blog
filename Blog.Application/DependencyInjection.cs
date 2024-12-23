@@ -1,4 +1,4 @@
-using Blog.Application.Services.Authentication;
+using MediatR;
 using Microsoft.Extensions.DependencyInjection;
 
 namespace Blog.Application
@@ -7,7 +7,9 @@ namespace Blog.Application
     {
         public static IServiceCollection AddApplication(this IServiceCollection services)
         {
-            services.AddScoped<IAuthService, AuthService>();
+            services.AddMediatR(config =>
+                config.RegisterServicesFromAssembly(typeof(DependencyInjection).Assembly)
+            );
             return services;
         }
     }

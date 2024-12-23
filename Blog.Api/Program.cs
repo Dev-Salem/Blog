@@ -2,7 +2,6 @@ using Blog.Api.Errors;
 using Blog.Api.Filters;
 using Blog.Api.Middlewares;
 using Blog.Application;
-using Blog.Application.Services.Authentication;
 using Blog.infra;
 using Microsoft.AspNetCore.Mvc.Infrastructure;
 using Microsoft.Extensions.Options;

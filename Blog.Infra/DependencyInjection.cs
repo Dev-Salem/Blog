@@ -1,4 +1,4 @@
-using Blog.Application.Common.Interfaces;
+using Blog.Application.Common.Interfaces.Authentication;
 using Blog.Application.Common.Interfaces.Persistence;
 using Blog.Application.Common.Interfaces.Services;
 using Blog.Infra.Authentication;

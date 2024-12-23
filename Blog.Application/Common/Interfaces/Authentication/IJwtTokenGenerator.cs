@@ -1,4 +1,4 @@
-namespace Blog.Application.Common.Interfaces
+namespace Blog.Application.Common.Interfaces.Authentication
 {
     public interface IJwtTokenGenerator
     {
