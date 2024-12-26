@@ -1,5 +1,6 @@
 using ErrorOr;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.ModelBinding;
 
 namespace Blog.Api.Controllers
 {
@@ -9,9 +10,22 @@ namespace Blog.Api.Controllers
         [Route("exception")]
         protected IActionResult Problem(List<Error> errors)
         {
-            var firstError = errors[0];
+            if (errors.Count == 0)
+            {
+                return Problem();
+            }
+            if (errors.All(error => error.Type == ErrorType.Validation))
+            {
+                return ValidationProblem(errors);
+            }
             HttpContext.Items["errors"] = errors;
-            int statusCode = firstError.Type switch
+
+            return Problem(errors[0]);
+        }
+
+        private IActionResult Problem(Error error)
+        {
+            int statusCode = error.Type switch
             {
                 ErrorType.NotFound => StatusCodes.Status404NotFound,
                 ErrorType.Validation => StatusCodes.Status400BadRequest,
@@ -20,7 +34,17 @@ namespace Blog.Api.Controllers
                 ErrorType.Forbidden => StatusCodes.Status403Forbidden,
                 _ => StatusCodes.Status500InternalServerError,
             };
-            return Problem(statusCode: statusCode, title: firstError.Description);
+            return Problem(statusCode: statusCode, title: error.Description);
+        }
+
+        private IActionResult ValidationProblem(List<Error> errors)
+        {
+            var modelStateDict = new ModelStateDictionary();
+            foreach (var error in errors)
+            {
+                modelStateDict.AddModelError(error.Code, error.Description);
+            }
+            return ValidationProblem();
         }
     }
 }
