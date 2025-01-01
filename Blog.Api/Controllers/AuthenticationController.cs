@@ -5,11 +5,13 @@ using Blog.Application.Common.Authentication;
 using Blog.Contracts.Authentication;
 using MapsterMapper;
 using MediatR;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace Blog.Api.Controllers
 {
     [Route("auth")]
+    [AllowAnonymous]
     public class AuthenticationController(ISender service, IMapper mapper) : ApiController
     {
         private readonly ISender _mediatR = service;
@@ -24,17 +26,6 @@ namespace Blog.Api.Controllers
             return authResult.Match(
                 value => Ok(_mapper.Map<AuthenticationResponse>(value)),
                 errors => Problem(errors)
-            );
-        }
-
-        private static AuthenticationResponse MapAuthenticationResult(AuthenticationResult value)
-        {
-            return new AuthenticationResponse(
-                Id: value.User.Id,
-                FirstName: value.User.FirstName,
-                LastName: value.User.LastName,
-                Email: value.User.Email,
-                Token: value.Token
             );
         }
 
