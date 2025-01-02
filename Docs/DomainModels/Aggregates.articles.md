@@ -1,4 +1,5 @@
 ```json
+Basic Structure
 {
 "id":"uuid",
 "title": "article title",
@@ -14,8 +15,3 @@
 }
 ```
 
-```cs
-class Article {
-    
-}
-```

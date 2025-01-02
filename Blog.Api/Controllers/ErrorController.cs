@@ -4,10 +4,11 @@ using Microsoft.AspNetCore.Mvc;
 namespace Blog.Api.Controllers
 {
     [ApiController]
-    [Route("api/[controller]")]
+    [Route("[controller]")]
     public class ErrorController : ControllerBase
     {
-        [Route("/error")]
+        [HttpGet]
+        [ApiExplorerSettings(IgnoreApi = true)]
         public IActionResult Error()
         {
             var exception = HttpContext.Features.Get<IExceptionHandlerFeature>();

@@ -1,0 +1,16 @@
+@host = http://localhost:5207
+
+POST {{host}}/users/fgsdgg/articles
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJnaXZlbl9uYW1lIjoiZmlyc3QgbmFtZSIsImZhbWlseV9uYW1lIjoibGFzdCBuYW1lIiwianRpIjoiN2RlZmQwZGYtZmI4NS00Y2Q4LTg5ZTctYzU5MzFjNjg0YzljIiwic3ViIjoiYTZkNDNhYTEtZGZiNC00YTJkLWE5MWYtMTc4MzY0NmI4ZjczIiwiZXhwIjoxNzM1NzQ1MTc2LCJpc3MiOiJCbG9nIiwiYXVkIjoiQmxvZyJ9.AYnfeu3QeHHNjA4evQ5e6sgj-0vTQd3woDwih5ew8h8
+Content-Type: application/json
+
+{
+  "title": "string",
+  "authorId": "string",
+  "subtitle": "string",
+  "content": "string",
+  "coverImage": "string",
+  "tagIds": [
+    "string"
+  ]
+}

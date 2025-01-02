@@ -22,8 +22,15 @@ namespace Blog.infra
         {
             services.AddAuth(configuration);
             services.AddSingleton<IDateTimeProvider, DateTimeProvider>();
-            services.AddScoped<IUserRepository, UserRepository>();
+            services.AddPersistence();
 
+            return services;
+        }
+
+        public static IServiceCollection AddPersistence(this IServiceCollection services)
+        {
+            services.AddScoped<IUserRepository, UserRepository>();
+            services.AddScoped<IArticleRepository, ArticleRepository>();
             return services;
         }
 
